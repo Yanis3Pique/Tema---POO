@@ -8,6 +8,7 @@ private:
     char* position;
     int age;
     int salary;
+    long value;
 public:
     Jucator() {
         name = new char[13];
@@ -16,8 +17,9 @@ public:
         strcpy(position, "CM");
         age = 27;
         salary = 160000;
+        value = 30000000;
     }
-    Jucator(const char* nume, const char* pozitie, int varsta, int salariu) : age(varsta), salary(salariu) {
+    Jucator(const char* nume, const char* pozitie, int varsta, int salariu, long valoare) : age(varsta), salary(salariu), value(valoare) {
         name = new char[strlen(nume) + 1];
         strcpy(name, nume);
         position = new char[strlen(pozitie) + 1];
@@ -34,6 +36,7 @@ public:
 
         this->age = other.age;
         this->salary = other.salary;
+        this->value = other.value;
     }
     ~Jucator() {
         if(name != nullptr) delete[] name;
@@ -54,6 +57,7 @@ public:
 
             this->age = other.age;
             this->salary = other.salary;
+            this->value = other.value;
         }
         return *this;
     }
@@ -62,10 +66,12 @@ public:
     const char* getPosition() const;
     int getAge() const;
     int getSalary() const;
+    int getValue() const;
     void setName(const char* newName);
     void setPosition(const char* newPosition);
     void setAge(int newAge);
     void setSalary(int newSalary);
+    void setValue(long newValue);
 };
 const char* Jucator::getName() const {
     return name;
@@ -78,6 +84,9 @@ int Jucator::getAge() const {
 }
 int Jucator::getSalary() const {
     return salary;
+}
+int Jucator::getValue() const {
+    return value;
 }
 void Jucator::setName(const char *newName) {
     if(name != nullptr) delete[] name;
@@ -95,11 +104,15 @@ void Jucator::setAge(int newAge) {
 void Jucator::setSalary(int newSalary) {
     salary = newSalary;
 }
+void Jucator::setValue(long newValue) {
+    value = newValue;
+}
 ostream& operator<<(ostream& out, const Jucator& jucator){
     out << "Numele jucatorului: " << jucator.name << endl;
     out << "Pozitia jucatorului: " << jucator.position << endl;
     out << "Varsta jucatorului: " << jucator.age << " de ani" << endl;
     out << "Salariul jucatorului: " << jucator.salary << "$" << endl;
+    out << "Valoarea jucatorului: " << jucator.value << "$" << endl;
     return out;
 }
 
@@ -299,15 +312,13 @@ public:
             number_players(numar_jucatori)
     {
         strcpy(name, nume);
-        cout << "Enter the number of players: ";
-        cin >> number_players;
         if (number_players > 0) {
             lista_jucatori = new Jucator[number_players];
             for (int i = 0; i < number_players; i++) {
                 char nume_jucator[50], pozitie[4];
                 int varsta, salariu;
+                long valoare;
                 cout << endl << "Nume jucator:";
-                cin.ignore();  // add this to clear the newline character left in the input buffer
                 cin.getline(nume_jucator, 50);
                 cout  << "Pozitie:";
                 cin.getline(pozitie, 4);
@@ -315,13 +326,14 @@ public:
                 cin >> varsta;
                 cout << "Salariu:";
                 cin >> salariu;
-                lista_jucatori[i] = Jucator(nume_jucator, pozitie, varsta, salariu);
+                cout << "Valoare:";
+                cin >> valoare;
+                lista_jucatori[i] = Jucator(nume_jucator, pozitie, varsta, salariu, valoare);
+                cin.ignore(); // ignora caracterul newline lăsat în fluxul de intrare de către cin >>
             }
         }
         cout << endl;
     }
-
-
     Echipa(const Echipa& other) : name(new char[strlen(other.name) + 1]), coach(other.coach), stadium(other.stadium), lista_jucatori(nullptr), number_players(other.number_players) {
         strcpy(name, other.name);
         if (number_players > 0) {
@@ -359,16 +371,19 @@ public:
         }
         return *this;
     }
+    double calculatePlayersMediumSalary();
+    double calculateSquadValue();
+    double calculateAverageAge();
     friend ostream& operator<<(ostream& out, const Echipa& echipa);
-    const char* setName();
-    const Antrenor& setCoach();
-    const Stadion& setStadium();
-    void setPlayers();
     void setName(const char* newName);
     void setCoach(const Antrenor& newCoach);
     void setStadium(const Stadion& newStadium);
     void setPlayers(const Jucator* newPlayers, int numar_jucatori);
+    const char* getName() const;
 };
+const char* Echipa::getName() const {
+    return name;
+}
 void Echipa::setName(const char* newName) {
     delete[] name;
     name = new char[strlen(newName) + 1];
@@ -394,118 +409,195 @@ void Echipa::setPlayers(const Jucator* newPlayers, int numar_jucatori) {
     }
 }
 ostream& operator<<(ostream& out, const Echipa& echipa) {
+    int OK = 0;
     out << "Echipa: " << endl << echipa.name << endl << endl;
     out << "Antrenor: " << endl << echipa.coach << endl;
     out << "Stadion:" << endl << echipa.stadium << endl;
     out << "Jucatori: " << endl;
     for (int i = 0; i < echipa.number_players; i++) {
         out << "Player " << i + 1 << ": " << endl << echipa.lista_jucatori[i] << endl;
+        OK = 1;
     }
+    if(OK == 0)out << "N/A" << endl;
+    return out;
+}
+double Echipa::calculatePlayersMediumSalary() {
+    double sum = 0;
+    int count = 0;
+    for(int i=0; i<number_players; i++) {
+        sum += lista_jucatori[i].getSalary();
+        count++;
+    }
+    if(count == 0) return 0;
+    else return sum/count;
+}
+double Echipa::calculateSquadValue() {
+    long sum = 0;
+    for(int i=0; i<number_players; i++) {
+        sum += long(lista_jucatori[i].getValue());
+    }
+    return sum;
+}
+double Echipa::calculateAverageAge() {
+    double sum = 0;
+    for(int i = 0; i < number_players; i++) {
+        sum += lista_jucatori[i].getAge();
+    }
+    return sum / number_players;
+}
+
+class Meci {
+private:
+    Echipa echipa1;
+    Echipa echipa2;
+    int scor1;
+    int scor2;
+public:
+    Meci() : echipa1(), echipa2(), scor1(0), scor2(0) {}
+    Meci(const Echipa& e1, const Echipa& e2) : echipa1(e1), echipa2(e2), scor1(0), scor2(0) {}
+    void setScor(int s1, int s2) {
+        scor1 = s1;
+        scor2 = s2;
+    }
+    friend ostream& operator<<(ostream& out, const Meci& meci);
+};
+ostream& operator<<(ostream& out, const Meci& meci) {
+    out << "Meciul s-a incheiat cu scorul " << meci.echipa1.getName() << " " << meci.scor1 << " - " << meci.scor2 << " " << meci.echipa2.getName() << "." << endl;
     return out;
 }
 
 int main() {
-//    // 1. Testare - Stadion
-//    cout << "Testam clasa si functionalitatile clasei Stadion:" << endl;
-//    Stadion stadion1("Old Trafford", "Sir Matt Busby Way", 75000);
-//    Stadion stadion2(stadion1);
-//    Stadion stadion3 = stadion1;
-//    Stadion stadion4;
-//    cout << stadion1 << endl;
-//    cout << stadion2 << endl;
-//    cout << stadion3 << endl;
-//    cout << stadion4 << endl;
-//    Stadion stadion5;
-//    stadion5.setName("Camp Nou");
-//    stadion5.setAdress("Calle d'Aristides Maillol");
-//    stadion5.setCapacity(99354);
-//    cout << "Nume cu get: " << stadion5.getName() << endl;
-//    cout << "Adresa cu get: " << stadion5.getAdress() << endl;
-//    cout << "Capacitate cu get: " << stadion5.getCapacity() << " de locuri" << endl << endl;
-//    cout << stadion5 << endl;
-//
-//    cout << "------------------------------------------------------------------------------------------------------------------------" << endl;
-//
-//    // 2. Testare - Jucator
-//    cout << "Testam clasa si functionalitatile clasei Jucator:" << endl;
-//    cout << "GK - Goalkeeper" << endl
-//         << "RB - Right back" << endl
-//         << "LB - Left back" << endl
-//         << "CB - Centre back" << endl
-//         << "RWB - Right wing back" << endl
-//         << "LWB - Left wing back" << endl
-//         << "CDM - Centre defensive midfielder" << endl
-//         << "CM - Centre midfielder" << endl
-//         << "CAM - Centre attacking midfielder" << endl
-//         << "RM - Right midfielder" << endl
-//         << "LM - Left midfielder" << endl
-//         << "RW - Right winger" << endl
-//         << "LW - Left winger" << endl
-//         << "CF - Centre forward" << endl
-//         << "ST - Striker" << endl << endl;
-//    Jucator jucator1("Lionel Andres Messi", "RW", 35, 300000);
-//    Jucator jucator2(jucator1);
-//    Jucator jucator3 = jucator1;
-//    Jucator jucator4;
-//    cout << jucator1 << endl;
-//    cout << jucator2 << endl;
-//    cout << jucator3 << endl;
-//    cout << jucator4 << endl;
-//    Jucator jucator5;
-//    jucator5.setName("Luis Alberto Suarez");
-//    jucator5.setPosition("ST");
-//    jucator5.setAge(36);
-//    jucator5.setSalary(250000);
-//    cout << "Nume cu get: " << jucator5.getName() << endl;
-//    cout << "Pozitie cu get: " << jucator5.getPosition() << endl;
-//    cout << "Varsta cu get: " << jucator5.getAge() << endl;
-//    cout << "Salariu cu get: " << jucator5.getSalary() << "$" << endl << endl;
-//    cout << jucator5 << endl;
-//
-//    cout << "------------------------------------------------------------------------------------------------------------------------" << endl;
-//
-//    // 3. Testare - Antrenor
-//    cout << "Testam clasa si functionalitatile clasei Antrenor:" << endl;
-//    Antrenor antrenor1("Xavi Hernandez", 4, 43, 75000);
-//    Antrenor antrenor2(antrenor1);
-//    Antrenor antrenor3 = antrenor1;
-//    Antrenor antrenor4;
-//    cout << antrenor1 << endl;
-//    cout << antrenor2 << endl;
-//    cout << antrenor3 << endl;
-//    cout << antrenor4 << endl;
-//    Antrenor antrenor5;
-//    antrenor5.setName("Luis Enrique");
-//    antrenor5.setExperience(16);
-//    antrenor5.setAge(52);
-//    antrenor5.setSalary(50000);
-//    cout << "Nume cu get: " << antrenor5.getName() << endl;
-//    cout << "Experienta cu get: " << antrenor5.getExperience() << " ani" << endl;
-//    cout << "Varsta cu get: " << antrenor5.getAge() << endl;
-//    cout << "Salariu cu get: " << antrenor5.getSalary() << "$" << endl << endl;
-//    cout << antrenor5 << endl;
-//
-//    cout << "------------------------------------------------------------------------------------------------------------------------" << endl;
+
+    // 1. Testare - Stadion
+    cout << "Testam clasa si functionalitatile clasei Stadion:" << endl;
+    Stadion stadion1("Old Trafford", "Sir Matt Busby Way", 75000);
+    Stadion stadion2(stadion1);
+    Stadion stadion3 = stadion1;
+    Stadion stadion4;
+    cout << stadion1 << endl;
+    cout << stadion2 << endl;
+    cout << stadion3 << endl;
+    cout << stadion4 << endl;
+    Stadion stadion5;
+    stadion5.setName("Camp Nou");
+    stadion5.setAdress("Calle d'Aristides Maillol");
+    stadion5.setCapacity(99354);
+    cout << "Nume cu get: " << stadion5.getName() << endl;
+    cout << "Adresa cu get: " << stadion5.getAdress() << endl;
+    cout << "Capacitate cu get: " << stadion5.getCapacity() << " de locuri" << endl << endl;
+    cout << stadion5 << endl;
+
+    cout << "------------------------------------------------------------------------------------------------------------------------" << endl;
+
+    // 2. Testare - Jucator
+    cout << "Testam clasa si functionalitatile clasei Jucator:" << endl;
+    cout << "GK - Goalkeeper" << endl
+         << "RB - Right back" << endl
+         << "LB - Left back" << endl
+         << "CB - Centre back" << endl
+         << "RWB - Right wing back" << endl
+         << "LWB - Left wing back" << endl
+         << "CDM - Centre defensive midfielder" << endl
+         << "CM - Centre midfielder" << endl
+         << "CAM - Centre attacking midfielder" << endl
+         << "RM - Right midfielder" << endl
+         << "LM - Left midfielder" << endl
+         << "RW - Right winger" << endl
+         << "LW - Left winger" << endl
+         << "CF - Centre forward" << endl
+         << "ST - Striker" << endl << endl;
+    Jucator jucator1("Lionel Andres Messi", "RW", 35, 300000, 180000000);
+    Jucator jucator2(jucator1);
+    Jucator jucator3 = jucator1;
+    Jucator jucator4;
+    cout << jucator1 << endl;
+    cout << jucator2 << endl;
+    cout << jucator3 << endl;
+    cout << jucator4 << endl;
+    Jucator jucator5;
+    jucator5.setName("Luis Alberto Suarez");
+    jucator5.setPosition("ST");
+    jucator5.setAge(36);
+    jucator5.setSalary(250000);
+    jucator5.setValue(150000000);
+    cout << "Nume cu get: " << jucator5.getName() << endl;
+    cout << "Pozitie cu get: " << jucator5.getPosition() << endl;
+    cout << "Varsta cu get: " << jucator5.getAge() << endl;
+    cout << "Salariu cu get: " << jucator5.getSalary() << "$" << endl;
+    cout << "Valoare cu get: " << jucator5.getValue() << "$" << endl;
+    cout << endl << jucator5 << endl;
+
+    cout << "------------------------------------------------------------------------------------------------------------------------" << endl;
+
+    // 3. Testare - Antrenor
+    cout << "Testam clasa si functionalitatile clasei Antrenor:" << endl;
+    Antrenor antrenor1("Xavi Hernandez", 4, 43, 75000);
+    Antrenor antrenor2(antrenor1);
+    Antrenor antrenor3 = antrenor1;
+    Antrenor antrenor4;
+    cout << antrenor1 << endl;
+    cout << antrenor2 << endl;
+    cout << antrenor3 << endl;
+    cout << antrenor4 << endl;
+    Antrenor antrenor5;
+    antrenor5.setName("Luis Enrique");
+    antrenor5.setExperience(16);
+    antrenor5.setAge(52);
+    antrenor5.setSalary(50000);
+    cout << "Nume cu get: " << antrenor5.getName() << endl;
+    cout << "Experienta cu get: " << antrenor5.getExperience() << " ani" << endl;
+    cout << "Varsta cu get: " << antrenor5.getAge() << endl;
+    cout << "Salariu cu get: " << antrenor5.getSalary() << "$" << endl << endl;
+    cout << antrenor5 << endl;
+
+    cout << "------------------------------------------------------------------------------------------------------------------------" << endl;
 
     // 4. Testare - Echipa
-//    cout << "Testam clasa si functionalitatile clasei Echipa:" << endl;
-//    Echipa echipa1;
-//    cout << echipa1;
+    cout << "Testam clasa si functionalitatile clasei Echipa:" << endl;
+    Echipa echipa1;
+    cout << echipa1;
 
+    cout << endl << "---1------------------------------------------------------------------------------------------------------------";
     Antrenor antrenor("John Smith", 0, 45, 10000);
     Stadion stadion("Stadionul National", "Bucuresti", 100000);
-    Jucator jucatori[] = { Jucator("Cristiano Ronaldo", "LW", 38, 200000), Jucator("Lionel Messi", "RW", 35, 180000), Jucator("Robert Lewandowski", "ST", 33, 150000) };
     Echipa echipa2("FC Barcelona", antrenor, stadion, 3);
-    cout << echipa2 << endl;
-    echipa2.setPlayers(jucatori, 2);
-    //cout << echipa2 << endl;
+    cout << echipa2;
 
-//    Echipa echipa3 = echipa2;
-//    cout << echipa3;
-//
-//    Echipa echipa4;
-//    echipa4 = echipa2;
-//    cout << echipa4;
+    cout << "---2------------------------------------------------------------------------------------------------------------" << endl;
+    Jucator jucatori[] = { Jucator("Cristiano Ronaldo", "LW", 38, 200000, 130000000), Jucator("Lionel Messi", "RW", 35, 180000, 180000000), Jucator("Robert Lewandowski", "ST", 33, 150000, 120000000) };
+    echipa2.setPlayers(jucatori, 3);
+    Antrenor antrenorNou("Pep Guardiola", 15, 51, 200000);
+    echipa2.setCoach(antrenorNou);
+    Stadion stadion12("San Siro", "Milano", 65000);
+    echipa2.setStadium(stadion1);
+    echipa2.setName("FC Internazionale Milano");
+    cout << echipa2;
+    cout << "Salariu mediu anual al jucatorilor din echipa " << echipa2.getName() << ": " << echipa2.calculatePlayersMediumSalary() << "$" << endl << endl;
+    cout << "Valoarea totala al jucatorilor din echipa " << echipa2.getName() << ": " << long(echipa2.calculateSquadValue()) << "$" << endl << endl;
+    cout << "Varsta medie a jucatorilor din echipa " << echipa2.getName() << ": " << echipa2.calculateAverageAge() << " de ani" << endl << endl;
+
+    cout <<"---3------------------------------------------------------------------------------------------------------------" << endl;
+    Echipa echipa3 = echipa2;
+    cout << echipa3;
+
+    cout << "---4------------------------------------------------------------------------------------------------------------" << endl;
+    Echipa echipa4;
+    echipa4 = echipa2;
+    cout << echipa4;
+
+    // 5. Testare - Meci
+    Echipa team1;
+    Jucator jucatori1[] = { Jucator("Cristiano Ronaldo", "LW", 38, 200000, 130000000), Jucator("Lionel Messi", "RW", 35, 180000, 180000000), Jucator("Robert Lewandowski", "ST", 33, 150000, 120000000) };
+    team1.setPlayers(jucatori, 3);
+    Antrenor antrenorNou1("Pep Guardiola", 15, 51, 200000);
+    team1.setCoach(antrenorNou);
+    Stadion stadion13("San Siro", "Milano", 65000);
+    team1.setStadium(stadion1);
+    team1.setName("FC Internazionale Milano");
+    Echipa team2;
+    Meci match(team1, team2);
+    match.setScor(3, 2);
+    cout << "---5------------------------------------------------------------------------------------------------------------" << endl << match << endl;
 
     return 0;
 }
