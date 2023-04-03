@@ -480,9 +480,12 @@ ostream& operator<<(ostream& out, const Meci& meci) {
 
 int main() {
 
+
+
     // 1. Testare - Stadion
     cout << "Testam clasa si functionalitatile clasei Stadion:" << endl;
     Stadion stadion1("Old Trafford", "Sir Matt Busby Way", 75000);
+    stadion1.setAdress("");
     Stadion stadion2(stadion1);
     Stadion stadion3 = stadion1;
     Stadion stadion4;
@@ -594,7 +597,7 @@ int main() {
     cout << "Valoarea totala al jucatorilor din echipa " << echipa2.getName() << ": " << echipa2.calculateSquadValue() << "$" << endl << endl;
     cout << "Varsta medie a jucatorilor din echipa " << echipa2.getName() << ": " << echipa2.calculateAverageAge() << " ani" << endl << endl;
 
-    cout <<"---3------------------------------------------------------------------------------------------------------------" << endl;
+    cout << "---3------------------------------------------------------------------------------------------------------------" << endl;
     Echipa echipa3 = echipa2;
     cout << echipa3;
 
