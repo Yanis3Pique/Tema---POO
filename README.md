@@ -2,7 +2,7 @@
 <hr>
 
 ![Aici trebuia sa fie un GIF cu Pique](https://media.tenor.com/OPVgBaJsXUgAAAAd/barça-pique.gif)
-![Aici trebuia sa fie un GIF cu Messi](https://media.tenor.com/N8LDDGZsyzgAAAAd/barca-messi.gif)
+![Aici trebuia sa fie un GIF cu Messi](https://github.com/Yanis3Pique/Tema1---POO/blob/d074ce28b29489f7752b12f39a1915f9bec9f8e9/ezgif.com-resize.gif)
 <hr>
 
 ## Scurta descriere a temei
