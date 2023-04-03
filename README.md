@@ -1,7 +1,7 @@
 # Echipa de fotbal - Tema 1, POO
 <hr>
 
-![Aici trebuia sa fie un GIF cu Pique](https://media.tenor.com/OPVgBaJsXUgAAAAd/barça-pique.gif?raw=true)
+![Aici trebuia sa fie un GIF cu Pique](https://github.com/Yanis3Pique/Tema1---POO/blob/master/bar%C3%A7a-pique.gif?raw=true)
 ![Aici trebuia sa fie un GIF cu Messi](https://github.com/Yanis3Pique/Tema1---POO/blob/d074ce28b29489f7752b12f39a1915f9bec9f8e9/ezgif.com-resize.gif?raw=true)
 <hr>
 
