@@ -110,7 +110,7 @@ void Jucator::setValue(long newValue) {
 ostream& operator<<(ostream& out, const Jucator& jucator){
     out << "Numele jucatorului: " << jucator.name << endl;
     out << "Pozitia jucatorului: " << jucator.position << endl;
-    out << "Varsta jucatorului: " << jucator.age << " de ani" << endl;
+    out << "Varsta jucatorului: " << jucator.age << " ani" << endl;
     out << "Salariul jucatorului: " << jucator.salary << "$" << endl;
     out << "Valoarea jucatorului: " << jucator.value << "$" << endl;
     return out;
@@ -199,7 +199,7 @@ void Antrenor::setSalary(int newSalary) {
 ostream& operator<<(ostream& out, const Antrenor& antrenor){
     out << "Numele antrenorului: " << antrenor.name << endl;
     out << "Experienta antrenorului: " << antrenor.experience << " ani" << endl;
-    out << "Varsta antrenorului: " << antrenor.age << " de ani" << endl;
+    out << "Varsta antrenorului: " << antrenor.age << " ani" << endl;
     out << "Salariul antrenorului: " << antrenor.salary << "$" << endl;
     return out;
 }
@@ -252,6 +252,18 @@ public:
             adress[strlen(other.adress)] = '\0';
 
             this->capacity = other.capacity;
+        }
+        return *this;
+    }
+    Stadion& operator=(Stadion&& other) noexcept {
+        if(this != &other)
+        {
+            this->name = other.name;
+            this->adress = other.adress;
+            this->capacity = other.capacity;
+            other.name = nullptr;
+            other.adress = nullptr;
+            other.capacity = 0;
         }
         return *this;
     }
@@ -372,7 +384,7 @@ public:
         return *this;
     }
     double calculatePlayersMediumSalary();
-    double calculateSquadValue();
+    long calculateSquadValue();
     double calculateAverageAge();
     friend ostream& operator<<(ostream& out, const Echipa& echipa);
     void setName(const char* newName);
@@ -431,7 +443,7 @@ double Echipa::calculatePlayersMediumSalary() {
     if(count == 0) return 0;
     else return sum/count;
 }
-double Echipa::calculateSquadValue() {
+long Echipa::calculateSquadValue() {
     long sum = 0;
     for(int i=0; i<number_players; i++) {
         sum += long(lista_jucatori[i].getValue());
@@ -486,6 +498,12 @@ int main() {
     cout << "Adresa cu get: " << stadion5.getAdress() << endl;
     cout << "Capacitate cu get: " << stadion5.getCapacity() << " de locuri" << endl << endl;
     cout << stadion5 << endl;
+    Stadion stadion6("San Siro", "Piazzale Angelo Moratti", 75817);
+    cout << "Testare operator = de mutare:" << endl;
+    cout << "Obicetul din care mutam, inainte de mutare: " << endl << stadion5 << endl;
+    stadion6 = move(stadion5);
+    cout << "Obiectul in care am mutat: " << endl << stadion6 << endl;
+    //cout << "Obiectul din care mutam, dupa mutare: " << endl << stadion5 << endl;
 
     cout << "------------------------------------------------------------------------------------------------------------------------" << endl;
 
@@ -522,7 +540,7 @@ int main() {
     jucator5.setValue(150000000);
     cout << "Nume cu get: " << jucator5.getName() << endl;
     cout << "Pozitie cu get: " << jucator5.getPosition() << endl;
-    cout << "Varsta cu get: " << jucator5.getAge() << endl;
+    cout << "Varsta cu get: " << jucator5.getAge() << " ani" << endl;
     cout << "Salariu cu get: " << jucator5.getSalary() << "$" << endl;
     cout << "Valoare cu get: " << jucator5.getValue() << "$" << endl;
     cout << endl << jucator5 << endl;
@@ -546,7 +564,7 @@ int main() {
     antrenor5.setSalary(50000);
     cout << "Nume cu get: " << antrenor5.getName() << endl;
     cout << "Experienta cu get: " << antrenor5.getExperience() << " ani" << endl;
-    cout << "Varsta cu get: " << antrenor5.getAge() << endl;
+    cout << "Varsta cu get: " << antrenor5.getAge() << " ani" << endl;
     cout << "Salariu cu get: " << antrenor5.getSalary() << "$" << endl << endl;
     cout << antrenor5 << endl;
 
@@ -573,8 +591,8 @@ int main() {
     echipa2.setName("FC Internazionale Milano");
     cout << echipa2;
     cout << "Salariu mediu anual al jucatorilor din echipa " << echipa2.getName() << ": " << echipa2.calculatePlayersMediumSalary() << "$" << endl << endl;
-    cout << "Valoarea totala al jucatorilor din echipa " << echipa2.getName() << ": " << long(echipa2.calculateSquadValue()) << "$" << endl << endl;
-    cout << "Varsta medie a jucatorilor din echipa " << echipa2.getName() << ": " << echipa2.calculateAverageAge() << " de ani" << endl << endl;
+    cout << "Valoarea totala al jucatorilor din echipa " << echipa2.getName() << ": " << echipa2.calculateSquadValue() << "$" << endl << endl;
+    cout << "Varsta medie a jucatorilor din echipa " << echipa2.getName() << ": " << echipa2.calculateAverageAge() << " ani" << endl << endl;
 
     cout <<"---3------------------------------------------------------------------------------------------------------------" << endl;
     Echipa echipa3 = echipa2;
