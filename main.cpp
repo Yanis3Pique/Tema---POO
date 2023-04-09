@@ -224,7 +224,7 @@ public:
         strcpy(adress, adresa);
     }
     Stadion(const Stadion& other){
-        name = new char[strlen(other.name)];
+            name = new char[strlen(other.name)];
         strncpy(this->name, other.name, strlen(other.name));
         name[strlen(other.name)] = '\0';
 
@@ -485,7 +485,6 @@ int main() {
     // 1. Testare - Stadion
     cout << "Testam clasa si functionalitatile clasei Stadion:" << endl;
     Stadion stadion1("Old Trafford", "Sir Matt Busby Way", 75000);
-    stadion1.setAdress("");
     Stadion stadion2(stadion1);
     Stadion stadion3 = stadion1;
     Stadion stadion4;
@@ -590,7 +589,7 @@ int main() {
     Antrenor antrenorNou("Pep Guardiola", 15, 51, 200000);
     echipa2.setCoach(antrenorNou);
     Stadion stadion12("San Siro", "Milano", 65000);
-    echipa2.setStadium(stadion1);
+    echipa2.setStadium(stadion12);
     echipa2.setName("FC Internazionale Milano");
     cout << echipa2;
     cout << "Salariu mediu anual al jucatorilor din echipa " << echipa2.getName() << ": " << echipa2.calculatePlayersMediumSalary() << "$" << endl << endl;
@@ -609,11 +608,11 @@ int main() {
     // 5. Testare - Meci
     Echipa team1;
     Jucator jucatori1[] = { Jucator("Cristiano Ronaldo", "LW", 38, 200000, 130000000), Jucator("Lionel Messi", "RW", 35, 180000, 180000000), Jucator("Robert Lewandowski", "ST", 33, 150000, 120000000) };
-    team1.setPlayers(jucatori, 3);
+    team1.setPlayers(jucatori1, 3);
     Antrenor antrenorNou1("Pep Guardiola", 15, 51, 200000);
     team1.setCoach(antrenorNou);
     Stadion stadion13("San Siro", "Milano", 65000);
-    team1.setStadium(stadion1);
+    team1.setStadium(stadion13);
     team1.setName("FC Internazionale Milano");
     Echipa team2;
     Meci match(team1, team2);
