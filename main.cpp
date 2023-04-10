@@ -26,11 +26,11 @@ public:
         strcpy(position, pozitie);
     }
     Jucator(const Jucator& other){
-        name = new char[strlen(other.name)];
+        name = new char[strlen(other.name) + 1];
         strncpy(this->name, other.name, strlen(other.name));
         name[strlen(other.name)] = '\0';
 
-        position = new char[strlen(other.position)];
+        position = new char[strlen(other.position) + 1];
         strncpy(this->position, other.position, strlen(other.position));
         position[strlen(other.position)] = '\0';
 
@@ -47,11 +47,11 @@ public:
             delete[] name;
             delete[] position;
 
-            name = new char[strlen(other.name)];
+            name = new char[strlen(other.name) + 1];
             strncpy(this->name, other.name, strlen(other.name));
             name[strlen(other.name)] = '\0';
 
-            position = new char[strlen(other.position)];
+            position = new char[strlen(other.position) + 1];
             strncpy(this->position, other.position, strlen(other.position));
             position[strlen(other.position)] = '\0';
 
@@ -124,7 +124,7 @@ private:
     int salary;
 public:
     Antrenor() {
-        name = new char[13];
+        name = new char[15];
         strcpy(name, "Joshamee Gibbs");
         experience = 0;
         age = 47;
@@ -135,7 +135,7 @@ public:
         strcpy(name, nume);
     }
     Antrenor(const Antrenor& other){
-        name = new char[strlen(other.name)];
+        name = new char[strlen(other.name) + 1];
         strncpy(this->name, other.name, strlen(other.name));
         name[strlen(other.name)] = '\0';
 
@@ -150,7 +150,7 @@ public:
         if(this != &other) {
             delete[] name;
 
-            name = new char[strlen(other.name)];
+            name = new char[strlen(other.name) + 1];
             strncpy(this->name, other.name, strlen(other.name));
             name[strlen(other.name)] = '\0';
 
@@ -224,11 +224,11 @@ public:
         strcpy(adress, adresa);
     }
     Stadion(const Stadion& other){
-            name = new char[strlen(other.name)];
+            name = new char[strlen(other.name) + 1];
         strncpy(this->name, other.name, strlen(other.name));
         name[strlen(other.name)] = '\0';
 
-        adress = new char[strlen(other.adress)];
+        adress = new char[strlen(other.adress) + 1];
         strncpy(this->adress, other.adress, strlen(other.adress));
         adress[strlen(other.adress)] = '\0';
 
@@ -243,11 +243,11 @@ public:
             delete[] name;
             delete[] adress;
 
-            name = new char[strlen(other.name)];
+            name = new char[strlen(other.name) + 1];
             strncpy(this->name, other.name, strlen(other.name));
             name[strlen(other.name)] = '\0';
 
-            adress = new char[strlen(other.adress)];
+            adress = new char[strlen(other.adress) + 1];
             strncpy(this->adress, other.adress, strlen(other.adress));
             adress[strlen(other.adress)] = '\0';
 
@@ -503,7 +503,7 @@ int main() {
     Stadion stadion6("San Siro", "Piazzale Angelo Moratti", 75817);
     cout << "Testare operator = de mutare:" << endl;
     cout << "Obicetul din care mutam, inainte de mutare: " << endl << stadion5 << endl;
-    stadion6 = move(stadion5);
+    stadion6 = std::move(stadion5);
     cout << "Obiectul in care am mutat: " << endl << stadion6 << endl;
     //cout << "Obiectul din care mutam, dupa mutare: " << endl << stadion5 << endl;
 
@@ -511,21 +511,6 @@ int main() {
 
     // 2. Testare - Jucator
     cout << "Testam clasa si functionalitatile clasei Jucator:" << endl;
-    cout << "GK - Goalkeeper" << endl
-         << "RB - Right back" << endl
-         << "LB - Left back" << endl
-         << "CB - Centre back" << endl
-         << "RWB - Right wing back" << endl
-         << "LWB - Left wing back" << endl
-         << "CDM - Centre defensive midfielder" << endl
-         << "CM - Centre midfielder" << endl
-         << "CAM - Centre attacking midfielder" << endl
-         << "RM - Right midfielder" << endl
-         << "LM - Left midfielder" << endl
-         << "RW - Right winger" << endl
-         << "LW - Left winger" << endl
-         << "CF - Centre forward" << endl
-         << "ST - Striker" << endl << endl;
     Jucator jucator1("Lionel Andres Messi", "RW", 35, 300000, 180000000);
     Jucator jucator2(jucator1);
     Jucator jucator3 = jucator1;
@@ -577,7 +562,22 @@ int main() {
     Echipa echipa1;
     cout << echipa1;
 
-    cout << endl << "---1------------------------------------------------------------------------------------------------------------";
+    cout << endl << "---1------------------------------------------------------------------------------------------------------------" << endl;
+    cout << "GK - Goalkeeper" << endl
+         << "RB - Right back" << endl
+         << "LB - Left back" << endl
+         << "CB - Centre back" << endl
+         << "RWB - Right wing back" << endl
+         << "LWB - Left wing back" << endl
+         << "CDM - Centre defensive midfielder" << endl
+         << "CM - Centre midfielder" << endl
+         << "CAM - Centre attacking midfielder" << endl
+         << "RM - Right midfielder" << endl
+         << "LM - Left midfielder" << endl
+         << "RW - Right winger" << endl
+         << "LW - Left winger" << endl
+         << "CF - Centre forward" << endl
+         << "ST - Striker" << endl;
     Antrenor antrenor("John Smith", 0, 45, 10000);
     Stadion stadion("Stadionul National", "Bucuresti", 100000);
     Echipa echipa2("FC Barcelona", antrenor, stadion, 3);
