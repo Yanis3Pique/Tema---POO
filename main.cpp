@@ -516,7 +516,7 @@ int main() {
     cout << "Obicetul din care mutam(stadion5), inainte de mutare: " << endl << stadion5 << endl;
     stadion6 = std::move(stadion5);
     cout << "Obiectul in care am mutat(stadion6): " << endl << stadion6 << endl;
-    cout << "Testare constructor de mutare" << endl;
+    cout << "Testare constructor de mutare:" << endl;
     cout << "Obicetul din care mutam(stadion6), inainte de mutare: " << endl << stadion6 << endl;
     Stadion stadion7(std::move(stadion6));
     cout << "Obiectul in care am mutat(stadion7): " << endl << stadion7 << endl;
