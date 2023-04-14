@@ -255,6 +255,17 @@ public:
         }
         return *this;
     }
+    Stadion(Stadion&& other) noexcept {
+        if(this != &other)
+        {
+            this->name = other.name;
+            this->adress = other.adress;
+            this->capacity = other.capacity;
+            other.name = nullptr;
+            other.adress = nullptr;
+            other.capacity = 0;
+        }
+    }
     Stadion& operator=(Stadion&& other) noexcept {
         if(this != &other)
         {
@@ -466,7 +477,7 @@ private:
     int scor2;
 public:
     Meci() : echipa1(), echipa2(), scor1(0), scor2(0) {}
-    Meci(const Echipa& e1, const Echipa& e2) : echipa1(e1), echipa2(e2), scor1(0), scor2(0) {}
+    Meci(const Echipa& e1, const Echipa& e2, int score1, int score2) : echipa1(e1), echipa2(e2), scor1(score1), scor2(score2) {}
     void setScor(int s1, int s2) {
         scor1 = s1;
         scor2 = s2;
@@ -502,9 +513,13 @@ int main() {
     cout << stadion5 << endl;
     Stadion stadion6("San Siro", "Piazzale Angelo Moratti", 75817);
     cout << "Testare operator = de mutare:" << endl;
-    cout << "Obicetul din care mutam, inainte de mutare: " << endl << stadion5 << endl;
+    cout << "Obicetul din care mutam(stadion5), inainte de mutare: " << endl << stadion5 << endl;
     stadion6 = std::move(stadion5);
-    cout << "Obiectul in care am mutat: " << endl << stadion6 << endl;
+    cout << "Obiectul in care am mutat(stadion6): " << endl << stadion6 << endl;
+    cout << "Testare constructor de mutare" << endl;
+    cout << "Obicetul din care mutam(stadion6), inainte de mutare: " << endl << stadion6 << endl;
+    Stadion stadion7(std::move(stadion6));
+    cout << "Obiectul in care am mutat(stadion7): " << endl << stadion7 << endl;
     //cout << "Obiectul din care mutam, dupa mutare: " << endl << stadion5 << endl;
 
     cout << "------------------------------------------------------------------------------------------------------------------------" << endl;
@@ -606,6 +621,7 @@ int main() {
     cout << echipa4;
 
     // 5. Testare - Meci
+    cout << "---5------------------------------------------------------------------------------------------------------------" << endl;
     Echipa team1;
     Jucator jucatori1[] = { Jucator("Cristiano Ronaldo", "LW", 38, 200000, 130000000), Jucator("Lionel Messi", "RW", 35, 180000, 180000000), Jucator("Robert Lewandowski", "ST", 33, 150000, 120000000) };
     team1.setPlayers(jucatori1, 3);
@@ -615,9 +631,10 @@ int main() {
     team1.setStadium(stadion13);
     team1.setName("FC Internazionale Milano");
     Echipa team2;
-    Meci match(team1, team2);
+    Meci match(team1, team2, 5, 1);
+    cout << match << endl;
     match.setScor(3, 2);
-    cout << "---5------------------------------------------------------------------------------------------------------------" << endl << match << endl;
+    cout << match << endl;
 
     return 0;
 }
