@@ -1,4 +1,4 @@
-# Echipa de fotbal - Tema 1, POO
+# Echipa de fotbal - Proiect, POO
 <hr>
 
 ![Aici trebuia sa fie un GIF cu Pique](https://github.com/Yanis3Pique/Tema1---POO/blob/master/bar%C3%A7a-pique.gif?raw=true)
