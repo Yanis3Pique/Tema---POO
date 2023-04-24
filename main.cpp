@@ -44,8 +44,8 @@ public:
     }
     Jucator& operator=(const Jucator& other) {
         if(this != &other) {
-            delete[] name;
-            delete[] position;
+            if(name != nullptr) delete[] name;
+            if(position != nullptr) delete[] position;
 
             name = new char[strlen(other.name) + 1];
             strncpy(this->name, other.name, strlen(other.name));
@@ -148,7 +148,7 @@ public:
     }
     Antrenor& operator=(const Antrenor& other) {
         if(this != &other) {
-            delete[] name;
+            if(name != nullptr) delete[] name;
 
             name = new char[strlen(other.name) + 1];
             strncpy(this->name, other.name, strlen(other.name));
@@ -240,8 +240,8 @@ public:
     }
     Stadion& operator=(const Stadion& other) {
         if(this != &other) {
-            delete[] name;
-            delete[] adress;
+            if(name != nullptr) delete[] name;
+            if(adress != nullptr) delete[] adress;
 
             name = new char[strlen(other.name) + 1];
             strncpy(this->name, other.name, strlen(other.name));
@@ -368,13 +368,13 @@ public:
     }
 
     ~Echipa() {
-        delete[] name;
-        delete[] lista_jucatori;
+        if(name != nullptr) delete[] name;
+        if(lista_jucatori != nullptr) delete[] lista_jucatori;
     }
 
     Echipa& operator=(const Echipa& other) {
         if (this != &other) {
-            delete[] name;
+            if(name != nullptr) delete[] name;
             name = new char[strlen(other.name) + 1];
             strcpy(name, other.name);
 
@@ -382,7 +382,7 @@ public:
             stadium = other.stadium;
             number_players = other.number_players;
 
-            delete[] lista_jucatori;
+            if(lista_jucatori != nullptr) delete[] lista_jucatori;
             if (number_players > 0) {
                 lista_jucatori = new Jucator[number_players];
                 for (int i = 0; i < number_players; i++) {
@@ -408,7 +408,7 @@ const char* Echipa::getName() const {
     return name;
 }
 void Echipa::setName(const char* newName) {
-    delete[] name;
+    if(name != nullptr) delete[] name;
     name = new char[strlen(newName) + 1];
     strcpy(name, newName);
 }
